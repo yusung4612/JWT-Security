@@ -42,14 +42,14 @@ public class Member extends Timestamped {
 //    }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) { //데이터 타입이 Object인 obj 값을 받는 equals 메서드
+        if (this == obj) { //조건문을 통해 주소 값과 실제 저장된 값을 동일하게 인식하게 해주는 작업을 진행
             return true;
         }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+        if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj)) {
             return false;
         }
-        Member member = (Member) o;
+        Member member = (Member) obj;
         return id != null && Objects.equals(id, member.id);
     }
 
