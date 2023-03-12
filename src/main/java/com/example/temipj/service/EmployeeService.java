@@ -80,6 +80,7 @@ public class EmployeeService {
     }
 
     //직원 정보 수정
+    @Transactional
     public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
 
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
@@ -91,16 +92,17 @@ public class EmployeeService {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
         }
 
-        Member member = validateMember(request);
-        if (null == member) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
-
-//        Member member = (Member) tokenProvider.getMemberFromAuthentication();
-//        if (employee.validateMember(member)) {
-//        if (employee.validateMember(member)) {
+//        Member member = validateMember(request);
+//        if (null == member) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
 //        }
+
+        Member member = (Member) tokenProvider.getMemberFromAuthentication();
+//        if (employee.validateMember(member)) {
+        if (employee.validateMember(member)) {
+            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+        }
         employee.update(requestDto);
         return ResponseDto.success(employee);
 
